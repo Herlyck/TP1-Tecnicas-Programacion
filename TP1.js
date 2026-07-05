@@ -4,7 +4,7 @@ const MAX_FILA = 10;
 const MAX_COL = 10;
 const SIMB_CASILLA_VACIA = " .";
 const SIMB_JUGADOR = " J";
-const SIMB_ENEMIGO = " X";
+const SIMB_ENEMIGO = " E";
 const SIMB_COMPUERTA = " C";
 const SIMB_SALIDA = " S";
 const tablero = [];
@@ -32,18 +32,16 @@ const salida = {
 
 };
 
-
 function main() {
     crearTablero();
     console.clear();
-
 
     for (let intentos = 0; intentos < 50; intentos++) {
         tablero[jugador.posY][jugador.posX] = SIMB_JUGADOR;
         tablero[compuertaSeguridad.posY][compuertaSeguridad.posX] = SIMB_COMPUERTA;
         tablero[salida.posY][salida.posX] = SIMB_SALIDA;
         tablero[enemigo.posY][enemigo.posX] = SIMB_ENEMIGO;
-        
+
         // if (jugador.posY === enemigo.posY && jugador.posX === enemigo.posX) {
         //     intentos = 50;
         // }
@@ -52,36 +50,54 @@ function main() {
 
     }
 
-
-
     mostrarTablero();
     leer();
-
-
-
     console.clear();
-    // tablero[--enemigo.posY][--enemigo.posX] = SIMB_ENEMIGO; tengo q actualizar estoy en prueba
+
+    actualizarCasillaA(jugador);
+    actualizarCasillaA(enemigo);
+
+    tablero[jugador.posY][jugador.posX] = SIMB_JUGADOR;
+    tablero[enemigo.posY][enemigo.posX] = SIMB_ENEMIGO;
     mostrarTablero();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 }
 main();
+
+
+
+function actualizarCasillaA(unPersonaje) {
+    tablero[unPersonaje.posY][unPersonaje.posX] = SIMB_CASILLA_VACIA;
+    unPersonaje.posY += generarMovimientoEntre(-1, 1);
+    unPersonaje.posX += generarMovimientoEntre(-1, 1);
+    regularMovimientoA(unPersonaje);
+}
+
+
+function generarMovimientoEntre(min, max) {
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is inclusive and the minimum is inclusive
+}
+
+
+
+function regularMovimientoA(unPersonaje) {
+    regularEjeA(unPersonaje, "posY", MAX_FILA);
+    regularEjeA(unPersonaje, "posX", MAX_COL);
+}
+
+
+function regularEjeA(unPersonaje, eje, maxEje) {
+    if (unPersonaje[eje] < 0) {
+        unPersonaje[eje] = 0;
+    } else if (unPersonaje[eje] > maxEje - 1) {
+        unPersonaje[eje] = maxEje - 1;
+    }
+}
+
 
 
 /**
