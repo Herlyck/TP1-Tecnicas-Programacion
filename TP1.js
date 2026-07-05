@@ -36,6 +36,7 @@ const salida = {
 function main() {
     crearTablero();
     console.clear();
+    
     tablero[jugador.posY][jugador.posX] = SIMB_JUGADOR;
     tablero[compuertaSeguridad.posY][compuertaSeguridad.posX] = SIMB_COMPUERTA;
     tablero[salida.posY][salida.posX] = SIMB_SALIDA;
