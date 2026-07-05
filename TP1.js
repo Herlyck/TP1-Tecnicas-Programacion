@@ -36,19 +36,19 @@ function main() {
     crearTablero();
     console.clear();
 
-    for (let intentos = 0; intentos < 50; intentos++) {
-        tablero[jugador.posY][jugador.posX] = SIMB_JUGADOR;
-        tablero[compuertaSeguridad.posY][compuertaSeguridad.posX] = SIMB_COMPUERTA;
-        tablero[salida.posY][salida.posX] = SIMB_SALIDA;
-        tablero[enemigo.posY][enemigo.posX] = SIMB_ENEMIGO;
 
-        // if (jugador.posY === enemigo.posY && jugador.posX === enemigo.posX) {
-        //     intentos = 50;
-        // }
+    tablero[jugador.posY][jugador.posX] = SIMB_JUGADOR;
+    tablero[compuertaSeguridad.posY][compuertaSeguridad.posX] = SIMB_COMPUERTA;
+    tablero[salida.posY][salida.posX] = SIMB_SALIDA;
+    tablero[enemigo.posY][enemigo.posX] = SIMB_ENEMIGO;
+    // for (let intentos = 0; intentos < 50; intentos++) {
+    //     if (jugador.posY === enemigo.posY && jugador.posX === enemigo.posX) {
+    //         intentos = 50;
+    //     }
 
-        // estoy en prueba
+    //     estoy en prueba
 
-    }
+    // }
 
     mostrarTablero();
     leer();
