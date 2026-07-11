@@ -1,5 +1,4 @@
 const leer = require("prompt-sync")();
-
 const MAX_FILA = 10;
 const MAX_COL = 10;
 const SIMB_CASILLA_VACIA = " .";
@@ -41,7 +40,12 @@ function main() {
     tablero[compuertaSeguridad.posY][compuertaSeguridad.posX] = SIMB_COMPUERTA;
     tablero[salida.posY][salida.posX] = SIMB_SALIDA;
     tablero[enemigo.posY][enemigo.posX] = SIMB_ENEMIGO;
+
+    
     // for (let intentos = 0; intentos < 50; intentos++) {
+    
+    
+    
     //     if (jugador.posY === enemigo.posY && jugador.posX === enemigo.posX) {
     //         intentos = 50;
     //     }
@@ -49,7 +53,7 @@ function main() {
     //     estoy en prueba
 
     // }
-
+    
     mostrarTablero();
     leer();
     console.clear();
@@ -67,7 +71,10 @@ function main() {
 main();
 
 
-
+/**
+ * actualizacion de casillas de los distintos personajes
+ * @param {Object} unPersonaje posiciones definidas de distintos personajes en objetos literales
+ */
 function actualizarCasillaA(unPersonaje) {
     tablero[unPersonaje.posY][unPersonaje.posX] = SIMB_CASILLA_VACIA;
     unPersonaje.posY += generarMovimientoEntre(-1, 1);
@@ -75,7 +82,12 @@ function actualizarCasillaA(unPersonaje) {
     regularMovimientoA(unPersonaje);
 }
 
-
+/**
+ * Genera un movimiento aleatorio entre 2 numeros
+ * @param {Number} min valor minimo incluido para generar movimiento
+ * @param {Number} max valor maximo incluido para generar movimiento
+ * @returns un numero aleatorio entre el minimo y el maximo
+ */
 function generarMovimientoEntre(min, max) {
     const minCeiled = Math.ceil(min);
     const maxFloored = Math.floor(max);
@@ -83,13 +95,21 @@ function generarMovimientoEntre(min, max) {
 }
 
 
-
+/**
+ * regula el movimiento de los personajes
+ * @param {Object} unPersonaje objeto literal con sus respectivas posiciones
+ */
 function regularMovimientoA(unPersonaje) {
     regularEjeA(unPersonaje, "posY", MAX_FILA);
     regularEjeA(unPersonaje, "posX", MAX_COL);
 }
 
-
+/**
+ * 
+ * @param {Object} unPersonaje objeto literal con sus respectivas posiciones
+ * @param {Number} eje posicion en el eje Y
+ * @param {Number} maxEje posicion en el eje X
+ */
 function regularEjeA(unPersonaje, eje, maxEje) {
     if (unPersonaje[eje] < 0) {
         unPersonaje[eje] = 0;
@@ -129,3 +149,7 @@ function crearTablero() {
         }
     }
 }
+
+
+
+
