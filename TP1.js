@@ -19,6 +19,7 @@ const jugador = {
     posX: 0
 };
 
+
 const compuertaSeguridad = {
     posY: 5,
     posX: 9
@@ -30,35 +31,28 @@ const salida = {
 };
 
 function main() {
-    crearTablero();
-
-    // Posicionamiento inicial
-    tablero[jugador.posY][jugador.posX] = SIMB_JUGADOR;
-    tablero[compuertaSeguridad.posY][compuertaSeguridad.posX] = SIMB_COMPUERTA;
-    tablero[salida.posY][salida.posX] = SIMB_SALIDA;
-    tablero[enemigo.posY][enemigo.posX] = SIMB_ENEMIGO;
-
     let juegoTerminado = false;
     let intentos = 1;
+    let desplazamiento = null;
+    crearTablero();
+    dibujarPiezas();
 
     while (!juegoTerminado && intentos <= MAX_INTENTOS) {
+
         console.clear();
         console.log(`--- INTENTO ${intentos} / ${MAX_INTENTOS} ---`);
         mostrarTablero();
 
-        // 1. Limpiar las posiciones actuales antes de mover
         tablero[jugador.posY][jugador.posX] = SIMB_CASILLA_VACIA;
         tablero[enemigo.posY][enemigo.posX] = SIMB_CASILLA_VACIA;
 
-        
         console.log("\nControles: W (Arriba), S (Abajo), A (Izquierda), D (Derecha)");
         console.log("Diagonales: Q (Arriba-Izq), E (Arriba-Der), Z (Abajo-Izq), C (Abajo-Der)");
 
-        const desplazamieto = pedirMovimientoJugador();
+        desplazamieto = pedirMovimientoJugador();
         jugador.posY += desplazamieto.desplY;
         jugador.posX += desplazamieto.desplX;
         regularMovimientoA(jugador); // Evita que salga del tablero
-
         actualizarCasillaA(enemigo);
 
         ({ juegoTerminado, intentos } = condicionesJuego(juegoTerminado, intentos)); //false y 1 valen en el primer momento
@@ -72,6 +66,13 @@ function main() {
 main();
 
 
+function dibujarPiezas() {
+    tablero[compuertaSeguridad.posY][compuertaSeguridad.posX] = SIMB_COMPUERTA;
+    tablero[jugador.posY][jugador.posX] = SIMB_JUGADOR;
+    tablero[enemigo.posY][enemigo.posX] = SIMB_ENEMIGO;
+    tablero[salida.posY][salida.posX] = SIMB_SALIDA;
+}
+
 /**
  * 
  * @param {boolean} juegoTerminado si es true entonces el juego termina
@@ -79,29 +80,18 @@ main();
  * @returns devuelve el valor que finaliza el juego por captura o por limite de intentos
  */
 function condicionesJuego(juegoTerminado, intentos) {
+    console.clear();
+    dibujarPiezas();
+    mostrarTablero();
     if (jugador.posY === enemigo.posY && jugador.posX === enemigo.posX) {
         juegoTerminado = true;
-        console.clear();
-        tablero[enemigo.posY][enemigo.posX] = SIMB_ENEMIGO;
-        mostrarTablero();
         console.log("\n💀 ¡Game Over! El enemigo te atrapó.");
     }
     else if (jugador.posY === salida.posY && jugador.posX === salida.posX) {
         juegoTerminado = true;
-        console.clear();
-        tablero[jugador.posY][jugador.posX] = SIMB_JUGADOR;
-        mostrarTablero();
         console.log("\n🎉 ¡Ganaste! Lograste escapar.");
     }
     else {
-        tablero[jugador.posY][jugador.posX] = SIMB_JUGADOR;
-        tablero[enemigo.posY][enemigo.posX] = SIMB_ENEMIGO;
-        tablero[salida.posY][salida.posX] = SIMB_SALIDA;
-
-        if (!(enemigo.posY === compuertaSeguridad.posY && enemigo.posX === compuertaSeguridad.posX)) {
-            tablero[compuertaSeguridad.posY][compuertaSeguridad.posX] = SIMB_COMPUERTA;
-        }
-
         intentos++;
     }
     return { juegoTerminado, intentos };
@@ -115,24 +105,59 @@ function pedirMovimientoJugador() {
     let direccion = "";
     let desplX = 0;
     let desplY = 0;
-    let entradaValida = false;
+    let entradaInvalida = false;
 
-    while (!entradaValida) {
+    do {
+        entradaInvalida = false;
         direccion = leer("Tu movimiento: ").toLowerCase().trim();
-
         switch (direccion) {
-            case "w": desplY = -1; desplX = 0; entradaValida = true; break; // Arriba
-            case "s": desplY = 1; desplX = 0; entradaValida = true; break; // Abajo
-            case "a": desplY = 0; desplX = -1; entradaValida = true; break; // Izquierda
-            case "d": desplY = 0; desplX = 1; entradaValida = true; break; // Derecha
-            case "q": desplY = -1; desplX = -1; entradaValida = true; break; // Arriba - Izquierda
-            case "e": desplY = -1; desplX = 1; entradaValida = true; break; // Arriba - Derecha
-            case "z": desplY = 1; desplX = -1; entradaValida = true; break; // Abajo - Izquierda
-            case "c": desplY = 1; desplX = 1; entradaValida = true; break; // Abajo - Derecha
+            case "w":
+                desplY = -1;
+                desplX = 0;
+                break;
+
+            case "s":
+                desplY = 1;
+                desplX = 0;
+                break;
+
+            case "a":
+                desplY = 0;
+                desplX = -1;
+                break;
+
+            case "d":
+                desplY = 0;
+                desplX = 1;
+                break;
+
+            case "q":
+                desplY = -1;
+                desplX = -1;
+                break;
+
+            case "e":
+                desplY = -1;
+                desplX = 1;
+                break;
+
+            case "z":
+                desplY = 1;
+                desplX = -1;
+                break;
+
+            case "c":
+                desplY = 1;
+                desplX = 1;
+                break;
+
             default:
                 console.log("❌ Tecla inválida. Usá W, A, S, D o Q, E, Z, C para diagonales.");
+                entradaInvalida = true;
+                break;
+
         }
-    }
+    } while (entradaInvalida);
 
     return { desplX, desplY };
 }
@@ -171,7 +196,7 @@ function regularMovimientoA(unPersonaje) {
 /**
  * @param {Object} unPersonaje objeto literal con sus respectivas posiciones
  * @param {string} eje propiedad del objeto ("posY" o "posX")
- * @param {number} maxEje limite maximo del eje
+ * @param {Number} maxEje limite maximo del eje
  */
 function regularEjeA(unPersonaje, eje, maxEje) {
     if (unPersonaje[eje] < 0) {
@@ -205,3 +230,6 @@ function crearTablero() {
         }
     }
 }
+
+
+
